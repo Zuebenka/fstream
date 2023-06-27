@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
 using namespace std;
 
@@ -10,110 +9,110 @@ struct Product {
     float price;
 };
 
-// функция для записи информации о товаре в файл
-void writeToFile(fstream& file, const Product& product) {
-    file << product.name << endl;
-    file << product.quantity << endl;
-    file << product.price << endl;
+void writeDataToFile(string filename, Product product) {
+    ofstream file(filename, ios::app);
+
+    if (file.is_open()) {
+        file << product.name << endl;
+        file << product.quantity << endl;
+        file << product.price << endl;
+        file.close();
+        cout << "Р”Р°РЅРЅС‹Рµ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅС‹ РІ С„Р°Р№Р» " << filename << endl;
+    }
+    else {
+        cout << "РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» " << filename << endl;
+    }
 }
 
-// функция для чтения информации о товаре из файла
-Product readFromFile(fstream& file) {
-    Product product;
-    getline(file, product.name);
-    file >> product.quantity;
-    file >> product.price;
-    file.ignore(); // игнорируем символ перевода строки после цены
-    return product;
+void printData(string filename) {
+    ifstream file(filename);
+
+    if (file.is_open()) {
+        cout << "Id\tРќР°Р·РІР°РЅРёРµ\tРљРѕР»-РІРѕ\tР¦РµРЅР°" << endl;
+        int id = 1;
+        while (!file.eof()) { 
+            Product product;
+            file >> product.name >> product.quantity >> product.price;
+            if (!product.name.empty()) { 
+                cout << id << ")\t" << product.name << "\t\t" << product.quantity << "\t" << product.price << endl;
+                id++;
+            }
+        }
+        file.close();
+    }
+    else {
+        cout << "РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» " << filename << endl;
+    }
 }
 
 int main() {
-    fstream file1("product1.txt", ios::in | ios::out);
-    fstream file2("product2.txt", ios::in | ios::out);
-    fstream file3("product3.txt", ios::in | ios::out);
+    string filename1 = "data1.txt";
+    string filename2 = "data2.txt";
+    string filename3 = "data3.txt";
 
-    // узнаем, заполнены ли файлы
-    bool isFile1Empty = file1.peek() == ifstream::traits_type::eof();
-    bool isFile2Empty = file2.peek() == ifstream::traits_type::eof();
-    bool isFile3Empty = file3.peek() == ifstream::traits_type::eof();
+    cout << "РњРµРЅСЋ:" << endl;
+    cout << "1 - Р—Р°РїРёСЃР°С‚СЊ С‚РѕРІР°СЂ РІ С„Р°Р№Р» " << filename1 << endl;
+    cout << "2 - Р—Р°РїРёСЃР°С‚СЊ С‚РѕРІР°СЂ РІ С„Р°Р№Р» " << filename2 << endl;
+    cout << "3 - Р—Р°РїРёСЃР°С‚СЊ С‚РѕРІР°СЂ РІ С„Р°Р№Р» " << filename3 << endl;
+    cout << "4 - РЎС‡РёС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ РёР· С„Р°Р№Р»РѕРІ Рё РІС‹РІРµСЃС‚Рё С‚Р°Р±Р»РёС†Сѓ" << endl;
 
-    if (isFile1Empty) {
-        cout << "Введите информацию о товаре для файла product1.txt" << endl;
-        for (int i = 0; i < 3; i++) {
+    int choice;
+    cin >> choice;
+
+    switch (choice) {
+        case 1:
+        {
             Product product;
-            cout << "Введите название товара: ";
-            getline(cin, product.name);
-            cout << "Введите количество товара: ";
+            cout << "Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С‚РѕРІР°СЂР°: ";
+            cin >> product.name;
+            cout << "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ: ";
             cin >> product.quantity;
-            cout << "Введите цену товара: ";
+            cout << "Р’РІРµРґРёС‚Рµ С†РµРЅСѓ: ";
             cin >> product.price;
-            file1.clear();
-            file1.seekp(0, ios::end); // ставим указатель на конец файла
-            writeToFile(file1, product);
-            cin.ignore(); // игнорируем символ перевода строки после цены
+            writeDataToFile(filename1, product);
+            break;
         }
-    }
-
-    if (isFile2Empty) {
-        cout << "Введите информацию о товаре для файла product2.txt" << endl;
-        for (int i = 0; i < 3; i++) {
+        case 2:
+        {
             Product product;
-            cout << "Введите название товара: ";
-            getline(cin, product.name);
-            cout << "Введите количество товара: ";
+            cout << "Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С‚РѕРІР°СЂР°: ";
+            cin >> product.name;
+            cout << "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ: ";
             cin >> product.quantity;
-            cout << "Введите цену товара: ";
+            cout << "Р’РІРµРґРёС‚Рµ С†РµРЅСѓ: ";
             cin >> product.price;
-            file2.clear();
-            file2.seekp(0, ios::end);
-            writeToFile(file2, product);
-            cin.ignore();
+            writeDataToFile(filename2, product);
+            break;
         }
-    }
-
-    if (isFile3Empty) {
-        cout << "Введите информацию о товаре для файла product3.txt" << endl;
-        for (int i = 0; i < 3; i++) {
+        case 3:
+        {
             Product product;
-            cout << "Введите название товара: ";
-            getline(cin, product.name);
-            cout << "Введите количество товара: ";
+            cout << "Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С‚РѕРІР°СЂР°: ";
+            cin >> product.name;
+            cout << "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ: ";
             cin >> product.quantity;
-            cout << "Введите цену товара: ";
+            cout << "Р’РІРµРґРёС‚Рµ С†РµРЅСѓ: ";
             cin >> product.price;
-            file3.clear();
-            file3.seekp(0, ios::end);
-            writeToFile(file3, product);
-            cin.ignore();
+            writeDataToFile(filename3, product);
+            break;
         }
+        case 4:
+        {
+            cout << "Р”Р°РЅРЅС‹Рµ РёР· С„Р°Р№Р»Р° " << filename1 << ":" << endl;
+            printData(filename1);
+            
+            cout << "Р”Р°РЅРЅС‹Рµ РёР· С„Р°Р№Р»Р° " << filename2 << ":" << endl;
+            printData(filename2);
+            
+            cout << "Р”Р°РЅРЅС‹Рµ РёР· С„Р°Р№Р»Р° " << filename3 << ":" << endl;
+            printData(filename3);
+            
+            break;
+        }
+        default:
+            cout << "РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ РІС‹Р±РѕСЂ" << endl;
+            break;
     }
-
-    // вывод таблицы с информацией о товарах из всех файлов
-    cout << "Id   Название    Кол-во   Цена" << endl;
-
-    file1.seekg(0, ios::beg);
-    file2.seekg(0, ios::beg);
-    file3.seekg(0, ios::beg);
-
-    for (int i = 1; i <= 3; i++) {
-        Product product1, product2, product3;
-        if (!isFile1Empty) {
-            product1 = readFromFile(file1);
-        }
-        if (!isFile2Empty) {
-            product2 = readFromFile(file2);
-        }
-        if (!isFile3Empty) {
-            product3 = readFromFile(file3);
-        }
-        cout << i << ")   " << product1.name << "     " << product1.quantity << "      " << product1.price << endl;
-        cout << "    " << product2.name << "     " << product2.quantity << "      " << product2.price << endl;
-        cout << "    " << product3.name << "     " << product3.quantity << "      " << product3.price << endl;
-    }
-
-    file1.close();
-    file2.close();
-    file3.close();
 
     return 0;
 }
